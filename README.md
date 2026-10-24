@@ -1,8 +1,3 @@
-과제 제출 가이드라인 이미지에 나와 있는 필수 항목들(**코드 설명, 모델 성능 비교, Confusion Matrix 분석, 최종 결과**)을 완벽하게 충족할 수 있도록 **업그레이드된 README 템플릿**을 작성해 드립니다.
-
-VS Code에서 기존 `README.md` 내용을 아래 코드로 완전히 교체(`Ctrl + A` 후 붙여넣기)하신 뒤, 본인의 실험 결과에 맞게 수치나 모델 이름만 살짝 수정해 주시면 완벽한 제출본이 됩니다!
-
----
 
 ```markdown
 # 🚀 sEMG Motion Prediction Project
@@ -117,20 +112,3 @@ python src/04_compute_cost.py
 
 
 * **전체적인 실험 결과 및 느낀 점:** sEMG 신호의 특성상 노이즈 처리와 전처리 과정이 모델의 최종 성능에 결정적인 영향을 미친다는 것을 확인했으며, 교차 검증을 통해 과적합을 방지하는 방법을 체득함
-
-
-
-```
-
----
-
-### 💡 적용 방법
-1. VS Code에서 `README.md` 파일을 열고 위 내용을 복사해서 붙여넣습니다.
-2. 수치나 모델 이름 중 `(예: ...)`으로 적힌 부분만 본인의 실험 결과에 맞게 알맞게 수정합니다.
-3. 터미널에 아래 명령어를 입력하여 깃허브에 최종 반영합니다!
-   ```bash
-   git add README.md
-   git commit -m "Update README according to assignment requirements"
-   git push origin main
-
-```
