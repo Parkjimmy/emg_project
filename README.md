@@ -1,10 +1,3 @@
-깃허브 레포지토리를 아주 깔끔하게 만드셨으니, 이제 프로젝트의 얼굴인 `README.md`를 작성할 차례입니다!
-
-sEMG(근전도) 동작 예측 프로젝트의 목적과 구조가 한눈에 들어오도록, 바로 복사해서 수정·사용하실 수 있는 **전문적이고 깔끔한 README 템플릿**을 준비했습니다.
-
-VS Code에서 `README.md` 파일을 열고 아래 내용을 붙여넣어 보세요!
-
----
 
 ```markdown
 # 🚀 sEMG Motion Prediction Project
@@ -73,5 +66,3 @@ pip install -r requirements.txt
   git push origin main
 
 ```
-
-작성하시다가 수정하고 싶은 내용이나 추가하고 싶은 항목(사용 기술 스택, 주요 결과 요약 등)이 있다면 언제든 편하게 말씀해 주세요!
