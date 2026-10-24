@@ -1,8 +1,3 @@
-과제 제출 가이드라인(`[cite: 2]`)과 업로드하신 Random Forest Confusion Matrix 결과(`[cite: 3]`)를 바탕으로, 전체 항목이 빠짐없이 포함된 완성형 **`README.md`** 소스코드를 작성해 드립니다.
-
-아래 내용을 복사하여 VS Code의 `README.md` 파일에 그대로 붙여넣으시면 됩니다.
-
----
 
 ```markdown
 # 🚀 sEMG Motion Prediction Project
@@ -133,14 +128,3 @@ python src/04_compute_cost.py
 
 ```
 
----
-
-### 🚀 최종 깃허브 반영 방법
-VS Code에 위 내용을 저장하신 후 터미널에 아래 명령어를 입력하시면 깃허브에 최종 반영됩니다!
-
-```bash
-git add README.md
-git commit -m "Complete final README based on assignment guidelines and confusion matrix"
-git push origin main
-
-```
