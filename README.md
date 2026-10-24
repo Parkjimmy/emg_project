@@ -49,9 +49,7 @@
 
 ### 프로젝트 코드 구조
 
-
-```
-
+```text
 .
 ├── main.py          # 전체 실험 실행 메인 스크립트
 ├── data.py          # sEMG 신호 로딩, 전처리, 윈도잉 및 25D 특징 추출 모듈
@@ -63,11 +61,19 @@
 ```
 
 | 파일명 | 역할 및 주요 기능 |
-| :--- | :--- |
-| main.py | 파이프라인 전체를 제어하며 학습, 검증, 성능 비교 및 리포트를 한 번에 실행[cite: 3, 4] |
-| data.py | 원시 EMG 신호에 필터링(Notch+BPF)을 적용하고 25차원 TD 특징 벡터 집합 생성[cite: 3, 4] |
-| model.py | 분류 모델(RF, SVM, XGBoost)의 하이퍼파라미터 및 인스턴스 정의[cite: 3, 4] |
-| evaluation.py | 성능 평가 지표(Accuracy, Precision, Recall, F1) 계산, 통계 검정, Confusion Matrix 시각화[cite: 3, 4] |
+| --- | --- |
+| main.py | 파이프라인 전체를 제어하며 학습, 검증, 성능 비교 및 리포트를 한 번에 실행
+
+ |
+| data.py | 원시 EMG 신호에 필터링(Notch+BPF)을 적용하고 25차원 TD 특징 벡터 집합 생성
+
+ |
+| model.py | 분류 모델(RF, SVM, XGBoost)의 하이퍼파라미터 및 인스턴스 정의
+
+ |
+| evaluation.py | 성능 평가 지표(Accuracy, Precision, Recall, F1) 계산, 통계 검정, Confusion Matrix 시각화
+
+ |
 
 ---
 
@@ -184,3 +190,13 @@ python main.py
 
 
 * 특징 영역 확장: 각도 구분력 향상을 위해 주파수영역(MNF, MDF) 및 시간-주파수 영역 특징과의 결합 연구가 권장됨.
+
+
+
+
+
+
+
+```
+
+```
