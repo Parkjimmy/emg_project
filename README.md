@@ -134,6 +134,8 @@ python src/main.py
 
 ## 4. Confusion Matrix 분석
 
+<img width="720" height="600" alt="confusion8" src="https://github.com/user-attachments/assets/a99c2b6b-ccc7-43f8-9510-7842e6f895ea" />
+
 ### Random Forest Confusion Matrix 상세 분석 (윈도우 단위 집계)
 
 * 최고 식별 클래스:
