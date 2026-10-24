@@ -8,7 +8,7 @@
 ![XGBoost](https://img.shields.io/badge/XGBoost-111111?style=flat-square&logo=xgboost&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.style=flat-square)
 
-본 프로젝트는 전완(Forearm)과 상완(Upper Arm)의 5채널 표면 근전도(sEMG) 생체 신호를 활용하여 **손동작 4종**과 **팔꿈치 관절 각도 2종**이 결합된 **8개 다차원 동작 클래스(8-Class)**를 동시에 분류하는 경량 머신러닝 파이프라인 재현 및 성능 비교 연구입니다.
+본 프로젝트는 전완(Forearm)과 상완(Upper Arm)의 5채널 표면 근전도(sEMG) 생체 신호를 활용하여 "손동작 4종"과 "팔꿈치 관절 각도 2종"이 결합된 "8개 다차원 동작 클래스(8-Class)"를 동시에 분류하는 경량 머신러닝 파이프라인 재현 및 성능 비교 연구입니다.
 
 ---
 
