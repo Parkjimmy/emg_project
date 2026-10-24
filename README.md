@@ -1,4 +1,3 @@
-
 ```markdown
 # sEMG 팔동작 및 팔꿈치 각도 동시 분류 프로젝트
 > Simultaneous Classification of Hand Gestures and Elbow Angles using sEMG Signals
@@ -51,12 +50,16 @@
 
 ```text
 .
-├── main.py          # 전체 실험 실행 메인 스크립트
-├── data.py          # sEMG 신호 로딩, 전처리, 윈도잉 및 25D 특징 추출 모듈
-├── model.py         # SVM, Random Forest, XGBoost 모델 생성 및 설정
-├── evaluation.py    # Hold-out, 5-Fold 교차검증, Confusion Matrix 시각화 및 t-검정
-├── confusion8.png   # 혼동행렬 (Confusion Matrix) 결과 이미지
-└── README.md        # 프로젝트 결과 문서
+├── outputs/
+│   └── confusion8.png   # 혼동행렬 (Confusion Matrix) 결과 이미지
+├── src/
+│   ├── main.py          # 전체 실험 실행 메인 스크립트
+│   ├── data.py          # sEMG 신호 로딩, 전처리, 윈도잉 및 25D 특징 추출 모듈
+│   ├── model.py         # SVM, Random Forest, XGBoost 모델 생성 및 설정
+│   └── evaluation.py    # Hold-out, 5-Fold 교차검증, Confusion Matrix 시각화 및 t-검정
+├── .gitignore
+├── requirements.txt
+└── README.md            # 프로젝트 결과 문서
 
 ```
 
@@ -81,10 +84,10 @@
 
 ```bash
 # 환경 설정 및 의존성 패키지 설치
-pip install numpy pandas scikit-learn xgboost matplotlib scipy
+pip install -r requirements.txt
 
 # 메인 실행 스크립트 동작
-python main.py
+python src/main.py
 
 ```
 
@@ -133,27 +136,49 @@ python main.py
 ### Random Forest Confusion Matrix 상세 분석 (윈도우 단위 집계)
 
 * 최고 식별 클래스:
-* 30 open_: 1,920건 정답 (최고 정확도)[cite: 1, 5]
-* 30 fist_: 1,915건 정답[cite: 1, 5]
-* 30 extor_: 1,848건 정답[cite: 1, 5]
-* 60 open_: 1,798건 정답[cite: 1, 5]
+* 30 open_: 1,920건 정답 (최고 정확도)
+
+
+* 30 fist_: 1,915건 정답
+
+
+* 30 extor_: 1,848건 정답
+
+
+* 60 open_: 1,798건 정답
+
+
 
 
 * 최다 오분류 클래스:
-* 60 fist_: 1,693건 정답 / 오분류 673건 발생[cite: 1, 5]
-* 30 pro_: 1,742건 정답 / 오분류 599건 발생[cite: 1, 5]
+* 60 fist_: 1,693건 정답 / 오분류 673건 발생
+
+
+* 30 pro_: 1,742건 정답 / 오분류 599건 발생
+
+
 
 
 * 주요 오분류 패턴 분석:
 1. 동일 동작 내 팔꿈치 각도 간 오분류 (60도 -> 30도):
-* 60 fist_ -> 30 fist_: 191건 오분류[cite: 1, 5]
-* 60 pro_ -> 30 pro_: 166건 오분류[cite: 1, 5]
-* 60 open_ -> 30 open_: 160건 오분류[cite: 1, 5]
+* 60 fist_ -> 30 fist_: 191건 오분류
+
+
+* 60 pro_ -> 30 pro_: 166건 오분류
+
+
+* 60 open_ -> 30 open_: 160건 오분류
+
+
 
 
 2. 동일 각도 내 유사 손동작 간 상호 혼동:
-* 30 pro_ -> 30 extor_: 156건 오분류[cite: 1, 5]
-* 30 extor_ -> 30 pro_: 130건 오분류[cite: 1, 5]
+* 30 pro_ -> 30 extor_: 156건 오분류
+
+
+* 30 extor_ -> 30 pro_: 130건 오분류
+
+
 
 
 
