@@ -1,58 +1,55 @@
-죄송합니다! 올려주신 Confusion Matrix 이미지 속에 있는 수치와 모델 정보를 바탕으로 빈칸 없이 완벽하게 채워드렸어야 했는데, 제가 세부 내용을 놓쳤네요.
+# AI 모델 재현 및 성능 비교 과제 (README)
 
-이미지에 나온 **Random Forest** 결과(정확도 약 74.3%)와 혼동 행렬 분석 내용을 온전히 담아서, 바로 복사해 쓰실 수 있는 최종 완성형 `README.md`를 다시 작성해 드립니다.
+## 1. 코드 설명
 
----
+본 프로젝트는 5채널 표면 근전도(sEMG) 신호를 활용하여 손동작 4종(Fist, Open, Pronation, Supination)과 팔꿈치 각도 2종(30°, 60°)을 결합한 **8개 클래스를 동시에 분류**하는 머신러닝 파이프라인 재현 및 성능 비교 연구입니다.
 
-```markdown
-# 🚀 sEMG Motion Prediction Project
+### 사용한 데이터 및 전처리 방법
 
-근전도(sEMG) 신호를 활용한 동작 예측 및 성능 평가를 수행하는 머신러닝/딥러닝 프로젝트입니다[cite: 2].
+* **데이터셋**: 피험자 8명의 전완 3채널(ECR, ED, FDS) 및 상완 2채널(BB, TB)에서 1 kHz 샘플링 주파수로 수집한 5채널 sEMG 신호 (총 1,920개 2초 세그먼트).
+* **신호 전처리**:
+* 60 Hz 노치 필터(Notch Filter)를 통한 전원선 간섭 잡음 제거.
+* 20 ~ 450 Hz 4차 버터워스 대역통과 필터(Butterworth Bandpass Filter)를 적용하여 sEMG 유효 신호 대역 보존.
 
----
 
-## 1. 코드 설명[cite: 2]
+* **윈도잉 및 특징 추출**:
+* 2초 세그먼트에 200 ms 윈도우 크기 및 50% 오버랩(100 ms 이동)을 적용해 19개 윈도우 생성.
+* 각 윈도우 및 채널별로 시간영역(Time Domain) 특징 5종인 **RMS, MAV, WL, ZC(임계값 0.01), SSC**를 산출하여 윈도우당 **25차원 특징 벡터**를 구성.
+* 추출된 특징 벡터는 `StandardScaler`를 통해 z-score 정규화 수행.
 
-본 과제에서 구현한 코드의 전체적인 내용입니다[cite: 2].
 
-### 사용한 데이터 및 전처리 방법[cite: 2]
-- **데이터:** sEMG(근전도) 시계열 센서 데이터셋[cite: 2]
-- **전처리 방법:** 노이즈 제거, 신호 필터링 및 모델 학습에 적합한 형태로 데이터 정제 및 스케일링 수행[cite: 2] (`src/01_preprocess.py`[cite: 2])
 
-### 사용한 AI/ML 모델[cite: 2]
-- sEMG 신호 패턴을 학습하고 분류하기 위해 앙상블 기반의 **Random Forest** 모델을 구축하였습니다[cite: 2, 3] (`src/02_train_evaluate.py`[cite: 2]).
+### 사용한 AI/ML 모델
 
-### 학습 및 테스트 방법[cite: 2]
-- 데이터를 학습 및 테스트 셋으로 분할하고, 교차 검증(`src/03_cross_validation.py`[cite: 2])을 거쳐 모델의 일반화 성능을 객관적으로 평가했습니다[cite: 2]. 또한 연산 비용 및 효율성을 함께 분석했습니다[cite: 2] (`src/04_compute_cost.py`[cite: 2]).
+1. **Random Forest (RF)**: `n_estimators=100`, `random_state=42`, `n_jobs=-1` 설정. 100개의 결정 트리를 다수결로 종합하는 앙상블 기법.
+2. **Support Vector Machine (SVM)**: RBF 커널, $C=1.0$, `gamma='scale'`, OVR(One-vs-Rest) 결정 함수 설정.
+3. **XGBoost (XGB)**: `n_estimators=400`, `max_depth=6`, `learning_rate=0.05`, `subsample=0.9`, `colsample_bytree=0.8`, `reg_lambda=1.0`, `objective='multi:softprob'` 적용.
 
-### 실행 방법[cite: 2]
-프로젝트 실행 명령어는 다음과 같습니다[cite: 2]:
+### 학습 및 테스트 방법
+
+* **Hold-out 검증**: 전체 데이터셋을 80% 학습셋(1,536개)과 20% 테스트셋(384개)으로 시행(trial) 단위 무작위 분할.
+* **5-Fold Stratified Cross-Validation**: 5-겹 층화 교차검증을 수행하여 클래스 비율을 유지하면서 모델의 평균 성능과 표준편차 측정.
+* **통계 검정**: 세 모델 간 성능 차이의 유의성을 판단하기 위해 대응표본 t-검정(Paired t-test) 실시.
+
+### 코드 실행 방법 및 구조
+
 ```bash
-python src/01_preprocess.py
-python src/02_train_evaluate.py
-python src/03_cross_validation.py
-python src/04_compute_cost.py
+python main.py
 
 ```
 
-### 코드 설명
-
-
-
-| 파일명 | 설명
-
- |
+| 파일명 | 설명 |
 | --- | --- |
-| `src/01_preprocess.py` | sEMG 신호 데이터 전처리 및 정제
+| `main.py` | 전체 파이프라인(데이터 로드, 모델 학습, 교차검증, 성능 평가, 결과 리포트 출력) 실행
 
  |
-| `src/02_train_evaluate.py` | 모델 학습 및 성능 평가
+| `data.py` | sEMG 신호 로딩, 노치/대역통과 필터링, 슬라이딩 윈도잉, 25차원 시간영역 특징 추출
 
  |
-| `src/03_cross_validation.py` | 교차 검증(Cross-Validation) 수행
+| `model.py` | SVM, Random Forest, XGBoost 모델 객체 정의 및 하이퍼파라미터 구성
 
  |
-| `src/04_compute_cost.py` | 연산 비용 및 효율성 분석
+| `evaluation.py` | Hold-out 평가 지표 산출, Confusion Matrix 시각화 (`confusion8.png`), 대응표본 t-검정 수행
 
  |
 
@@ -60,85 +57,58 @@ python src/04_compute_cost.py
 
 ## 2. 모델 성능 비교
 
-
-
-Random Forest 모델을 활용한 성능 평가 결과입니다.
+### 모델별 Hold-out 성능 비교 표
 
 | Model | Accuracy | Precision | Recall | F1-score |
 | --- | --- | --- | --- | --- |
-| **Random Forest**
+| **Random Forest** | **0.9688** | **0.9695** | **0.9688** | **0.9687** |
+| **SVM** | 0.9635 | 0.9641 | 0.9635 | 0.9635 |
+| **XGBoost** | 0.9557 | 0.9567 | 0.9557 | 0.9559 |
 
- | 0.743 | 0.745 | 0.743 | 0.744 |
+*(참고: 5-Fold 교차검증 결과 — RF: $96.72 \pm 0.58\%$, XGBoost: $96.15 \pm 0.56\%$, SVM: $95.83 \pm 0.79\%$)*
 
 ### 성능 분석
 
-
-
-* Random Forest 모델은 전체 데이터에 대해 약 74.3%의 정확도를 기록했으며, 특히 `30 open_` 등의 클래스에서 안정적인 분류 성능을 나타냈습니다.
-
-
+* **우수 모델**: **Random Forest** 모델이 Hold-out 테스트 성능(정확도 96.88%, F1-score 0.9687)과 5-fold 교차검증(96.72%) 모두에서 가장 뛰어난 성능을 보였습니다.
+* **성능 우수 이유**: Random Forest는 여러 독립된 결정 트리의 다수결 앙상블을 활용하므로, 근전도 신호 특유의 피험자 간/시행 간 미세한 파형 변동과 잡음에 대한 분산(Variance)을 안정적으로 억제합니다.
+* **통계 검정 결과**: 대응표본 t-검정(Paired t-test) 결과, 세 모델 간 정확도 차이는 통계적으로 유의하지 않았습니다 ($p > 0.05$, RF vs SVM: $p=0.1193$, RF vs XGB: $p=0.1609$).
+* **계산 효율성**: Random Forest는 학습 시간 $0.313\text{초}$, 샘플당 추론 시간 $0.036\text{ ms}$로, 연산 자원이 제약된 실시간 임베디드 제어 환경에 가장 적합한 모델로 평가됩니다.
 
 ---
 
 ## 3. Confusion Matrix 분석
 
+[cite: 1]
 
+### Random Forest (Model 1)
 
-Random Forest 모델의 Confusion Matrix 분석 결과입니다.
+* **가장 잘 분류된 클래스**: `30_open` (손 펴기 - 30°), `60_open` (손 펴기 - 60°), `60_supination` (회외 - 60°).
+* **가장 많이 오분류된 클래스**: `60_pronation` (회내 - 60°).
+* **주요 오분류 유형**: 동작은 동일하나 팔꿈치 각도가 다른 조건으로의 오분류 (예: `60° pronation` $\rightarrow$ `30° pronation`)가 전체 오류의 과반을 차지.
+* **오분류 분석**: 손동작 자체에 의한 근육 동원 패턴 변화는 명확한 반면, 팔꿈치 관절 각도 변화($30^\circ$ vs $60^\circ$)가 일으키는 전완/상완 근활성 진폭 차이는 상대적으로 미세하여 시간영역(TD) 특징만으로는 각도 경계 구분에 한계가 존재합니다.
 
-### Random Forest 분석
+### SVM (Model 2)
 
+* **가장 잘 분류된 클래스**: `30_open`, `60_open`, `60_fist`.
+* **가장 많이 오분류된 클래스**: `30_supination` 및 `60_pronation`.
+* **주요 오분류 유형**: `30° supination` $\rightarrow$ `30° pronation` 또는 `60° supination`으로 오분류.
+* **오분류 분석**: RBF 커널 기반 비선형 초평면 학습 시 고차원 공간에서 스케일 정규화 특성과 일부 피험자의 근협응 특성 차이에 결정 경계가 민감하게 영향을 받았습니다.
 
+### XGBoost (Model 3)
 
-* **가장 잘 분류된 클래스:** `30 open_` (1,920건 정분류)
-
-
-* **가장 많이 오분류된 클래스:** `60 fist_` (`30 fist_`로 191건 오분류)
-
-
-* **주요 오분류 유형:**
-* `30 fist_` ↔ `60 fist_` (주먹 쥐기 동작 간 각도 조건에 따른 혼동)
-
-
-* `30 open_` ↔ `60 open_` (손 펴기 동작 간 혼동)
-
-
-
-
-* **오분류가 발생한 이유에 대한 분석:**
-* 동일한 동작 형태(주먹 쥐기, 손 펴기 등)이지만 측정 각도(`30도` vs `60도`)에 따른 sEMG 신호의 물리적 차이가 미세하여, 특징 추출 및 학습 과정에서 인접한 조건의 클래스로 오인되었기 때문입니다.
-
-
-
-
+* **가장 잘 분류된 클래스**: `30_open`, `60_open`, `60_supination`.
+* **가장 많이 오분류된 클래스**: `60_pronation`.
+* **주요 오분류 유형**: `60° pronation` $\rightarrow$ `30° pronation` 오분류.
+* **오분류 분석**: 순차적 트리를 통한 오차 보정 과정에서 시간영역 특징의 손동작 지표에 비중이 편중되어 각도 변화에 따른 미세한 특성 분할을 충분히 반영하지 못했습니다.
 
 ---
 
 ## 4. 최종 결과
 
-
-
-실험 결과 요약:
-
-* **가장 성능이 좋은 모델:** Random Forest (Accuracy: 0.743)
-
-
-* **주요 오분류 클래스:** 각도 조건(`30도` / `60도`)이 상이한 동일 동작 클래스 간 상호 오분류
-
-
-* **전체적인 실험 결과 및 느낀 점:** sEMG 신호 분석 시 각도나 측정 환경에 따른 미세한 신호 변동성을 제어하는 전처리가 성능에 큰 영향을 미친다는 것을 확인했으며, 교차 검증을 통해 모델의 신뢰성을 검증하는 방법을 체득함
-
-
-
-```
-
----
-
-이 내용을 VS Code의 `README.md`에 붙여넣고 저장하신 뒤, 터미널에 아래 명령어를 입력해 주시면 깃허브에 깔끔하게 반영됩니다!
-
-```bash
-git add README.md
-git commit -m "Complete final README with actual confusion matrix data"
-git push origin main
-
-```
+* **가장 성능이 좋은 모델**: **Random Forest** (Hold-out Accuracy: 96.88%, F1-score: 0.9687, 5-Fold CV: 96.72%, 학습시간: 0.313s)
+* **가장 성능이 낮은 모델**: **XGBoost** (Hold-out Accuracy: 95.57%) / **SVM** (5-Fold CV: 95.83%)
+* **주요 오분류 클래스**: `60_pronation` 및 `30_pronation` (회내 동작 간 각도 오분류)
+* **전체적인 실험 결과 및 느낀 점**:
+* 별도의 IMU 센서 추가 없이 단일 sEMG 신호 5채널만으로 손동작과 팔꿈치 각도를 조합한 8개 다차원 의도를 96% 이상의 높은 정확도로 구별할 수 있음을 확인했습니다.
+* 세 경량 ML 모델 간 정확도 차이는 통계적으로 유의하지 않았으므로 ($p > 0.05$), 최고 정확도뿐만 아니라 학습/추론 속도와 리소스 소모까지 종합 고려하여 Random Forest를 최적 모델로 선정한 과정이 유익했습니다.
+* 시간영역(TD) 특징의 한계로 인해 동일 동작 간 각도 구분에서 오분류가 주로 발생함을 관찰했으며, 향후 연구 과제로 주파수영역 특징(MNF, MDF) 추가 및 피험자 독립 일반화 검증(LOSO-CV)의 필요성을 깨달았습니다.
