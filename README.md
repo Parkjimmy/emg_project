@@ -1,3 +1,7 @@
+GitHub 서버에서 엑스박스 없이 100% 정상 출력되는 **Raw URL 이미지 링크**를 적용하였으며, 강조 표시(`**`)를 모두 제거한 전체 `README.md` 마크다운 코드입니다.
+
+아래 코드 블록 전체를 복사하셔서 `README.md` 파일에 붙여넣으시면 됩니다.
+
 ```markdown
 # sEMG 팔동작 및 팔꿈치 각도 동시 분류 프로젝트
 > Simultaneous Classification of Hand Gestures and Elbow Angles using sEMG Signals
@@ -136,49 +140,27 @@ python src/main.py
 ### Random Forest Confusion Matrix 상세 분석 (윈도우 단위 집계)
 
 * 최고 식별 클래스:
-* 30 open_: 1,920건 정답 (최고 정확도)
-
-
-* 30 fist_: 1,915건 정답
-
-
-* 30 extor_: 1,848건 정답
-
-
-* 60 open_: 1,798건 정답
-
-
+* 30 open_: 1,920건 정답 (최고 정확도)[cite: 1, 5]
+* 30 fist_: 1,915건 정답[cite: 1, 5]
+* 30 extor_: 1,848건 정답[cite: 1, 5]
+* 60 open_: 1,798건 정답[cite: 1, 5]
 
 
 * 최다 오분류 클래스:
-* 60 fist_: 1,693건 정답 / 오분류 673건 발생
-
-
-* 30 pro_: 1,742건 정답 / 오분류 599건 발생
-
-
+* 60 fist_: 1,693건 정답 / 오분류 673건 발생[cite: 1, 5]
+* 30 pro_: 1,742건 정답 / 오분류 599건 발생[cite: 1, 5]
 
 
 * 주요 오분류 패턴 분석:
 1. 동일 동작 내 팔꿈치 각도 간 오분류 (60도 -> 30도):
-* 60 fist_ -> 30 fist_: 191건 오분류
-
-
-* 60 pro_ -> 30 pro_: 166건 오분류
-
-
-* 60 open_ -> 30 open_: 160건 오분류
-
-
+* 60 fist_ -> 30 fist_: 191건 오분류[cite: 1, 5]
+* 60 pro_ -> 30 pro_: 166건 오분류[cite: 1, 5]
+* 60 open_ -> 30 open_: 160건 오분류[cite: 1, 5]
 
 
 2. 동일 각도 내 유사 손동작 간 상호 혼동:
-* 30 pro_ -> 30 extor_: 156건 오분류
-
-
-* 30 extor_ -> 30 pro_: 130건 오분류
-
-
+* 30 pro_ -> 30 extor_: 156건 오분류[cite: 1, 5]
+* 30 extor_ -> 30 pro_: 130건 오분류[cite: 1, 5]
 
 
 
